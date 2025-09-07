@@ -1,76 +1,76 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="de">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Interaktive Checkliste</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>iFly 737 MAX 8 Checkliste</title>
 <style>
-  body{font-family:system-ui,Arial,Helvetica,sans-serif;background:#f5f7fb;margin:0;padding:20px}
-  .container{max-width:720px;margin:0 auto;background:#fff;padding:20px;border-radius:10px;box-shadow:0 6px 18px rgba(0,0,0,0.06)}
-  h1{margin:0 0 12px;font-size:1.25rem}
-  ul{list-style:none;padding:0;margin:0}
-  li{display:flex;align-items:center;padding:8px 0;border-bottom:1px solid #eee}
-  input[type="checkbox"]{margin-right:12px;width:18px;height:18px}
-  button{margin-top:14px;padding:8px 12px;border-radius:8px;border:1px solid #ccc;background:#fff;cursor:pointer}
+  body { font-family: Arial, sans-serif; background:#f0f2f5; padding:20px; }
+  .container { max-width: 700px; margin: 0 auto; background:#fff; padding:20px; border-radius:10px; box-shadow:0 6px 18px rgba(0,0,0,0.1);}
+  h1 { font-size: 1.5rem; margin-bottom: 10px; }
+  ul { list-style:none; padding:0; }
+  li { display:flex; align-items:center; padding:8px 0; border-bottom:1px solid #eee; }
+  input[type="checkbox"] { margin-right:12px; width:18px; height:18px; }
+  button { margin-top:15px; padding:8px 12px; border-radius:8px; border:1px solid #ccc; background:#f9f9f9; cursor:pointer; }
 </style>
 </head>
 <body>
-  <div class="container checklist" data-list-id="liste-1">
-    <h1>Meine Checkliste</h1>
-    <ul id="list"></ul>
-    <button type="button" id="resetBtn">Zurücksetzen</button>
+  <div class="container">
+    <h1>iFly 737 MAX 8 Pre-Flight Checkliste</h1>
+    <ul id="checklist"></ul>
+    <button id="resetBtn">Zurücksetzen</button>
   </div>
 
-  <script>
-  (function(){
-    // === Hier Aufgaben anpassen ===
-    const items = [
-      "Aufgabe 1",
-      "Aufgabe 2",
-      "Aufgabe 3"
-    ];
-    // ==============================
-    const container = document.querySelector('.checklist');
-    const listEl = container.querySelector('#list');
-    const listId = container.dataset.listId || 'default';
-    const prefix = 'cl_' + location.pathname + '_' + listId + '_';
+<script>
+(function(){
+  const checklistItems = [
+    "Cockpit-Bereich sauber & alle Schalter in Neutralstellung",
+    "Elektrische Systeme prüfen",
+    "Avionik-Systeme einschalten",
+    "FMS konfigurieren",
+    "Hydrauliksystem überprüfen",
+    "Triebwerks-Startcheck durchführen",
+    "Flugsteuerungen überprüfen",
+    "Bremsen & Reifen kontrollieren",
+    "Sicherheitsgurte & Notausrüstung prüfen",
+    "Kommunikationssystem prüfen"
+  ];
 
-    function build(){
-      listEl.innerHTML = '';
-      items.forEach((text, i) => {
-        const li = document.createElement('li');
-        const cb = document.createElement('input');
-        cb.type = 'checkbox';
-        cb.dataset.idx = i;
-        const key = prefix + i;
-        try{
-          if (localStorage.getItem(key) === '1') cb.checked = true;
-        }catch(e){}
-        cb.addEventListener('change', ()=> {
-          try{
-            if (cb.checked) localStorage.setItem(key, '1');
-            else localStorage.removeItem(key);
-          }catch(e){}
-        });
-        const label = document.createElement('label');
-        label.appendChild(cb);
-        label.appendChild(document.createTextNode(' ' + text));
-        li.appendChild(label);
-        listEl.appendChild(li);
-      });
-    }
+  const checklistEl = document.getElementById('checklist');
+  const prefix = 'ifly737max8_';
 
-    document.getElementById('resetBtn').addEventListener('click', function(e){
-      e.preventDefault();
-      items.forEach((_, i) => {
-        try { localStorage.removeItem(prefix + i); } catch(e){}
+  function buildChecklist() {
+    checklistEl.innerHTML = '';
+    checklistItems.forEach((item, i) => {
+      const li = document.createElement('li');
+      const cb = document.createElement('input');
+      cb.type = 'checkbox';
+      cb.dataset.idx = i;
+      const saved = localStorage.getItem(prefix + i);
+      if (saved === '1') cb.checked = true;
+
+      cb.addEventListener('change', () => {
+        if (cb.checked) localStorage.setItem(prefix + i, '1');
+        else localStorage.removeItem(prefix + i);
       });
-      listEl.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
+
+      const label = document.createElement('label');
+      label.appendChild(cb);
+      label.appendChild(document.createTextNode(' ' + item));
+      li.appendChild(label);
+      checklistEl.appendChild(li);
     });
+  }
 
-    if (document.readyState !== 'loading') build();
-    else document.addEventListener('DOMContentLoaded', build);
-  })();
-  </script>
+  document.getElementById('resetBtn').addEventListener('click', () => {
+    checklistItems.forEach((_, i) => localStorage.removeItem(prefix + i));
+    checklistEl.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
+  });
+
+  if (document.readyState !== 'loading') buildChecklist();
+  else document.addEventListener('DOMContentLoaded', buildChecklist);
+
+})();
+</script>
 </body>
 </html>
