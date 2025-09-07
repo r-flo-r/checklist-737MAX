@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>iFly 737 MAX 8 Flight Checklist</title>
+<title>737 MAX 8 Checklist (for Flightsim only)</title>
 <style>
   body {
     font-family: Arial, sans-serif;
@@ -12,7 +12,7 @@
     padding: 20px;
   }
   .container {
-    max-width: 800px;
+    max-width: 900px;
     margin: 0 auto;
     background: #1e1e1e;
     padding: 20px;
@@ -25,52 +25,32 @@
     align-items: center;
     margin-bottom: 15px;
   }
-  h1 {
-    font-size: 1.5rem;
-    margin: 0;
-  }
+  h1 { margin:0; font-size:1.6rem; }
+  h2 { margin-top:20px; margin-bottom:10px; font-size:1.3rem; }
+  h3 { margin-top:15px; margin-bottom:5px; font-size:1.1rem; color:#ccc; }
   button {
     padding: 6px 12px;
     border-radius: 8px;
-    border: 1px solid #888;
-    background: #333;
-    color: #f0f0f0;
-    cursor: pointer;
+    border:1px solid #888;
+    background:#333;
+    color:#f0f0f0;
+    cursor:pointer;
   }
-  button:hover {
-    background: #444;
-  }
-  h2 {
-    font-size: 1.2rem;
-    margin-top: 20px;
-    margin-bottom: 10px;
-  }
-  ul {
-    list-style: none;
-    padding: 0;
-    margin: 0 0 10px 0;
-  }
-  li {
-    display: flex;
-    align-items: center;
-    padding: 6px 0;
-    border-bottom: 1px solid #333;
-  }
+  button:hover { background:#444; }
+  table { width: 100%; border-collapse: collapse; margin-bottom: 10px; }
+  th, td { text-align:left; padding:6px; }
+  th { border-bottom:1px solid #555; }
+  tr { border-bottom:1px solid #333; }
   input[type="checkbox"] {
-    margin-right: 12px;
-    width: 22px;
-    height: 22px;
-    cursor: pointer;
-  }
-  label {
-    cursor: pointer;
+    width:22px; height:22px; cursor:pointer;
+    margin-right:10px;
   }
 </style>
 </head>
 <body>
 <div class="container">
   <div class="header">
-    <h1>iFly 737 MAX 8 Flight Checklist</h1>
+    <h1>iFly 737 MAX 8 Checklist</h1>
     <button id="resetBtn">Reset</button>
   </div>
   <div id="checklist"></div>
@@ -78,128 +58,232 @@
 
 <script>
 (function(){
-  const checklistSections = [
-    {title: "Preflight", items: [
-      "Cockpit clean & panels checked",
-      "Flight plan reviewed",
-      "Avionics power on",
-      "FMS programmed",
-      "Hydraulic levels checked"
-    ]},
-    {title: "Before Start", items: [
-      "Seats & belts adjusted",
-      "Parking brake set",
-      "Beacon lights on",
-      "Fuel quantity verified",
-      "Flight instruments checked"
-    ]},
-    {title: "Before Taxi", items: [
-      "Flight controls free & correct",
-      "Autopilot set",
-      "Navigation radios tuned",
-      "Flaps set for takeoff",
-      "Trim set"
-    ]},
-    {title: "Before Takeoff", items: [
-      "Doors & windows secured",
-      "Takeoff briefing complete",
-      "Cabin crew notified",
-      "Landing lights on",
-      "Transponder set"
-    ]},
-    {title: "After Takeoff", items: [
-      "Landing gear retracted",
-      "Flaps up",
-      "Autopilot engaged",
-      "Climb power set",
-      "Flight instruments cross-checked"
-    ]},
-    {title: "Climb", items: [
-      "Engine parameters normal",
-      "Pressurization checked",
-      "Navigation checked",
-      "Fuel flow monitored",
-      "Cabin signs adjusted"
-    ]},
-    {title: "Descent / Approach", items: [
-      "Altimeters set",
-      "Approach briefing complete",
-      "Landing lights on",
-      "Autobrake set",
-      "Speed brakes checked"
-    ]},
-    {title: "Landing", items: [
-      "Landing gear down & green",
-      "Flaps set",
-      "Spoilers armed",
-      "Autopilot disengaged",
-      "Brakes applied"
-    ]},
-    {title: "After Landing", items: [
-      "Flaps up",
-      "Transponder set",
-      "Strobe & landing lights off",
-      "Taxi clearance received",
-      "Parking brake set"
-    ]},
-    {title: "Parking / Shutdown", items: [
-      "Engines shut down",
-      "Electrical systems off",
-      "Fuel pumps off",
-      "APU off or as required",
-      "Cabin secured"
-    ]},
-    {title: "Secure Aircraft", items: [
-      "Doors locked",
-      "Flight deck secured",
-      "Control locks installed",
-      "Chocks in place",
-      "Documentation completed"
-    ]}
+  // Die Checkliste als JS-Objekt
+  const checklistData = [
+    {
+      section: "PREFLIGHT",
+      items: [
+        ["PARKING BRAKE","SET"],
+        ["BATTERY SWITCH","ON AND COVERED"],
+        ["GROUND POWER","CONNECTED AND ON"],
+        ["IRS SELECTOR (L & R)","NAV"],
+        ["CABIN/UTILITY","ON"],
+        ["IFE PASS SEAT POWER","ON"],
+        ["EMERGENCY LIGHTS","ARMED"],
+        ["POSITION LIGHTS","STEADY"],
+        ["WINDOWS HEAT","ON"],
+        ["TRIM AIR","ON"],
+        ["RECIRC FAN","AUTO"],
+        ["PACKS (L & R)","AUTO"],
+        ["ISOLATION VALVE","OPEN"],
+        ["PRESSURIZZATION PANEL","AUTO"],
+        ["FUEL PUMP FWD 1","ON"],
+        ["ALTIMETERS","SET"],
+        ["TRANSPONDER","SET ALT OFF"],
+        ["FLIGHT DIRECTORS","ON"],
+        ["FMC","SETUP"],
+        ["MCP","V2 - HDG - ALTITUDE"],
+        ["LNAV & VNAV","ARMED"],
+        ["APU","ON – START - ON"],
+        ["APU GEN","ON"],
+        ["APU BLEED","ON"]
+      ]
+    },
+    {
+      section: "BEFORE START",
+      items: [
+        ["GROUND POWER","DISCONNECTED AND OFF"],
+        ["FLIGHT DECK DOORS","CLOSED AND LOCKED"],
+        ["YAW DUMPER","ON"],
+        ["PROBE HEAT","ON"],
+        ["HYD PUMPS","ON"],
+        ["FUEL PUMPS","ON"],
+        ["PASSENGER SIGNS","ON/AUTO"],
+        ["ANTI COLLISION LIGHTS","ON"],
+        ["PACKS (L & R)","OFF"],
+        ["ENGINES START","START N2 THEN N1"]
+      ]
+    },
+    {
+      section: "BEFORE TAXI",
+      items: [
+        ["ENGINE GEN (1 & 2)","ON"],
+        ["ANTI-ICE","AS REQUIRED"],
+        ["AUTOBRAKE","RTO"],
+        ["FLAPS","SET"],
+        ["TRIM","SET"],
+        ["APU","OFF"],
+        ["APU BLEED","OFF"],
+        ["PACKS (L & R)","ON"],
+        ["ISOLATION VALVE","AUTO"],
+        ["FLIGHT CONTROLS","CHECKED"],
+        ["TAXI LIGHTS","ON"],
+        ["RWY TURN-OFF LIGHTS","AS REQUIRED"]
+      ]
+    },
+    {
+      section: "BEFORE TAKEOFF",
+      items: [
+        ["PARKING BRAKE","SET"],
+        ["AUTOTHROTTLE","ARM"],
+        ["TAKE OFF DATA ( V1 VR V2 )","CHECK"],
+        ["SET TERRAIN & WEATHER DISPLAY","AS NEEDED"],
+        ["LANDING LIGHTS","ON"],
+        ["POSITION LIGHTS","STROBE & STEADY"],
+        ["TAXY LIGHTS","OFF"],
+        ["TRANSPONDER","TA/RA"],
+        ["CLOCK","START"]
+      ]
+    },
+    {
+      section: "AFTER TAKEOFF",
+      items: [
+        ["POSITIVE RATE OF CLIMB","GEAR UP"],
+        ["AUTOBRAKE","OFF"],
+        ["RWY TURN-OFF LIGHTS","OFF"],
+        ["FLAPS","RETRACT ON SCHEDULE"],
+        ["AUTOPILOT","ENGAGE"]
+      ]
+    },
+    {
+      section: "CLIMB",
+      items: [
+        ["ALTIMETER","SET STD"],
+        ["Landing Lights","OFF"],
+        ["SEATBELTS SIGN","OFF"]
+      ]
+    },
+    {
+      section: "DESCEND",
+      items: [
+        ["ANTI-ICE","AS REQUIRED"],
+        ["RECALL","CHECK"],
+        ["LANDING ALT","SET"],
+        ["APPROACH BRIEFING","COMPLETE"],
+        ["ALTIMETER","LOCAL QNH"],
+        ["LANDING LIGHTS","ON"],
+        ["SEATBELTS SIGN","ON"]
+      ]
+    },
+    {
+      section: "APPROACH",
+      items: [
+        ["ALTIMETER","CHECK"],
+        ["DH/DA","SET"],
+        ["APPROACH SPEED (FMC)","SET & CHECK"],
+        ["APPROACH DATA (ILS AND COURSE)","SET"],
+        ["APPROACH BUTTON","ARM"],
+        ["SPEEDBRAKE","ARM"],
+        ["AUTOBRAKE","AS REQUIRED"],
+        ["FLAPS","SET"]
+      ]
+    },
+    {
+      section: "LANDING",
+      items: [
+        ["GO AROUND ALTITUDE","SET"],
+        ["LANDING GEAR","DOWN"],
+        ["LANDING FLAPS","SET"]
+      ]
+    },
+    {
+      section: "AFTER LANDING",
+      items: [
+        ["AUTOBRAKE","OFF"],
+        ["FLAPS","RETRACT"],
+        ["SPEEDBRAKES","DOWN"],
+        ["LANDING LIGHTS","OFF"],
+        ["STROBE LIGHTS","STEADY"],
+        ["TAXI LIGHTS","ON"],
+        ["TRANSPONDER","ALT OFF"],
+        ["APU","AS REQ"],
+        ["APU GEN","ON"],
+        ["TERRAIN & WEATHER DISPLAY","OFF"],
+        ["CLOCK","STOP"]
+      ]
+    },
+    {
+      section: "PARKING - SHUTDOWN",
+      items: [
+        ["PARKING BRAKE","SET"],
+        ["TAXI LIGHTS","OFF"],
+        ["CHOCKS","SET"],
+        ["EXTERNAL POWER","CONNECTED AND ON"],
+        ["APU","OFF"],
+        ["FUEL CONTROL SWITCHES","CUTOFF"],
+        ["ANTI COLLISION LIGHTS","OFF"],
+        ["FLIGHT DIRECTORS","OFF"],
+        ["PASSENGER SIGNS","OFF"],
+        ["YAW DUMPER","OFF"],
+        ["HYDRAULIC PUMPS","OFF"],
+        ["FUEL PUMPS","OFF"],
+        ["PROBE HEAT","OFF"],
+        ["DOORS","OPEN"]
+      ]
+    },
+    {
+      section: "SECURE AIRCRAFT",
+      items: [
+        ["IRS SELECTOR (L & R)","OFF"],
+        ["EMERGENCY LIGHTS","OFF"],
+        ["TRIM AIR","OFF"],
+        ["RECIRC FAN","OFF"],
+        ["PACKS (L & R)","OFF"],
+        ["ISOLATION VALVE","OPEN"],
+        ["LOGO LIGHTS","OFF"],
+        ["POSITION LIGHTS","OFF"],
+        ["WINDOWS HEAT","OFF"],
+        ["CABIN/UTILITY","OFF"],
+        ["IFE PASS SEAT POWER","OFF"],
+        ["BATTERY SWITCH","OFF"]
+      ]
+    }
   ];
 
   const checklistEl = document.getElementById('checklist');
-  const prefix = 'ifly737max8_full_dark_';
+  const prefix = 'ifly737max8_full_table_';
 
   function buildChecklist() {
     checklistEl.innerHTML = '';
-    checklistSections.forEach((section, sIdx) => {
+    checklistData.forEach((section, sIdx) => {
       const h2 = document.createElement('h2');
-      h2.textContent = section.title;
+      h2.textContent = section.section;
       checklistEl.appendChild(h2);
-      const ul = document.createElement('ul');
-      section.items.forEach((item, i) => {
-        const li = document.createElement('li');
+      const table = document.createElement('table');
+      section.items.forEach((item,i)=>{
+        const tr = document.createElement('tr');
+        const tdCheckbox = document.createElement('td');
         const cb = document.createElement('input');
-        cb.type = 'checkbox';
-        const key = prefix + sIdx + '_' + i;
-        if (localStorage.getItem(key) === '1') cb.checked = true;
-        cb.addEventListener('change', () => {
-          if (cb.checked) localStorage.setItem(key, '1');
+        cb.type='checkbox';
+        const key = prefix+sIdx+'_'+i;
+        if(localStorage.getItem(key)==='1') cb.checked=true;
+        cb.addEventListener('change',()=>{
+          if(cb.checked) localStorage.setItem(key,'1');
           else localStorage.removeItem(key);
         });
-        const label = document.createElement('label');
-        label.appendChild(cb);
-        label.appendChild(document.createTextNode(' ' + item));
-        li.appendChild(label);
-        ul.appendChild(li);
+        tdCheckbox.appendChild(cb);
+        const tdItem = document.createElement('td');
+        tdItem.textContent=item[0];
+        const tdAction = document.createElement('td');
+        tdAction.textContent=item[1];
+        tr.appendChild(tdCheckbox);
+        tr.appendChild(tdItem);
+        tr.appendChild(tdAction);
+        table.appendChild(tr);
       });
-      checklistEl.appendChild(ul);
+      checklistEl.appendChild(table);
     });
   }
 
-  document.getElementById('resetBtn').addEventListener('click', () => {
-    checklistSections.forEach((section, sIdx) => {
-      section.items.forEach((_, i) => {
-        localStorage.removeItem(prefix + sIdx + '_' + i);
-      });
+  document.getElementById('resetBtn').addEventListener('click',()=>{
+    checklistData.forEach((section,sIdx)=>{
+      section.items.forEach((_,i)=>localStorage.removeItem(prefix+sIdx+'_'+i));
     });
-    checklistEl.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
+    checklistEl.querySelectorAll('input[type="checkbox"]').forEach(cb=>cb.checked=false);
   });
 
-  if (document.readyState !== 'loading') buildChecklist();
-  else document.addEventListener('DOMContentLoaded', buildChecklist);
-
+  if(document.readyState!=='loading') buildChecklist();
+  else document.addEventListener('DOMContentLoaded',buildChecklist);
 })();
 </script>
 </body>
