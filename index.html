@@ -1,64 +1,144 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>737 MAX 8 Checklist</title>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>iFly 737 MAX 8 Checklist</title>
 <style>
-  body {
-    font-family: Arial, sans-serif;
-    background: #121212;
-    color: #f0f0f0;
-    padding: 20px;
+  :root {
+    --bg: #121212;
+    --card: #1e1e1e;
+    --muted: #aaa;
+    --line: #2b2b2b;
+    --text: #f0f0f0;
+    --accent: #2e8bff;
   }
+
+  body {
+    margin: 0;
+    font-family: Inter, Arial, Helvetica, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    padding: 20px;
+    -webkit-font-smoothing:antialiased;
+  }
+
   .container {
-    max-width: 900px;
+    max-width: 980px;
     margin: 0 auto;
-    background: #1e1e1e;
+    background: var(--card);
     padding: 20px;
     border-radius: 10px;
-    box-shadow: 0 6px 18px rgba(0,0,0,0.5);
+    box-shadow: 0 8px 30px rgba(0,0,0,0.6);
   }
+
   .header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 15px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap: 12px;
+    margin-bottom: 14px;
   }
-  h1 { margin:0; font-size:1.6rem; }
-  h2 { margin-top:20px; margin-bottom:10px; font-size:1.3rem; }
-  h3 { margin-top:15px; margin-bottom:5px; font-size:1.1rem; color:#ccc; }
-  button {
-    padding: 6px 12px;
+
+  h1 {
+    margin: 0;
+    font-size: 1.4rem;
+    letter-spacing: 0.2px;
+  }
+
+  #resetBtn {
+    background: transparent;
+    border: 1px solid #444;
+    color: var(--text);
+    padding: 8px 12px;
     border-radius: 8px;
-    border:1px solid #888;
-    background:#333;
-    color:#f0f0f0;
-    cursor:pointer;
+    cursor: pointer;
   }
-  button:hover { background:#444; }
-  table { width: 100%; border-collapse: collapse; margin-bottom: 10px; }
-  th, td { text-align:left; padding:6px; }
-  th { border-bottom:1px solid #555; }
-  tr { border-bottom:1px solid #333; }
+  #resetBtn:hover { background: rgba(255,255,255,0.03); border-color:#666; }
+
+  h2 {
+    margin: 18px 0 8px 0;
+    font-size: 1.15rem;
+    color: var(--text);
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 8px;
+    table-layout: fixed;
+  }
+
+  th, td {
+    padding: 8px 10px;
+    vertical-align: middle;
+    color: var(--text);
+    word-wrap: break-word;
+  }
+
+  tr { border-bottom: 1px solid var(--line); }
+
+  td.checkbox {
+    width: 64px; /* Platz für große Checkbox */
+  }
+  td.item {
+    width: calc(50% - 64px);
+    padding-right: 12px;
+  }
+  td.action {
+    width: calc(50% - 64px);
+    color: var(--muted);
+  }
+
   input[type="checkbox"] {
-    width:35px; height:35px; cursor:pointer;
-    margin-right:10px;
+    width: 35px;
+    height: 35px;
+    cursor: pointer;
+    margin: 0;
+    display: inline-block;
+    vertical-align: middle;
+  }
+
+  /* Label für Item klickbar machen */
+  label.item-label {
+    cursor: pointer;
+    display: inline-block;
+    line-height: 1.2;
+    color: var(--text);
+  }
+
+  tr.subsection td {
+    text-align: center;
+    font-style: italic;
+    color: #cfcfcf;
+    background: rgba(255,255,255,0.008);
+    border-bottom: 1px solid rgba(255,255,255,0.02);
+  }
+
+  /* responsive */
+  @media (max-width: 720px) {
+    td.checkbox { width: 52px; }
+    td.item, td.action { display: block; width: 100%; }
+    table { display: block; }
+    tr { display:block; padding:6px 0; border-bottom:1px solid var(--line); }
+    tr.subsection td { display:block; padding:8px 0; }
+    td.checkbox { display:flex; align-items:center; gap:8px; padding-bottom:6px; }
   }
 </style>
 </head>
 <body>
-<div class="container">
-  <div class="header">
-    <h1>iFly 737 MAX 8 Checklist</h1>
-    <button id="resetBtn">Reset</button>
+  <div class="container">
+    <div class="header">
+      <h1>iFly 737 MAX 8 Checklist</h1>
+      <button id="resetBtn" type="button">Reset</button>
+    </div>
+
+    <div id="checklist" aria-live="polite"></div>
   </div>
-  <div id="checklist"></div>
-</div>
 
 <script>
 (function(){
-  // Die Checkliste als JS-Objekt
+  // --- Daten: alle Abschnitte und Items (Subsections beginnen/enden mit '-')
   const checklistData = [
     {
       section: "PREFLIGHT",
@@ -130,7 +210,7 @@
         ["SET TERRAIN & WEATHER DISPLAY","AS NEEDED"],
         ["LANDING LIGHTS","ON"],
         ["POSITION LIGHTS","STROBE & STEADY"],
-        ["TAXY LIGHTS","OFF"],
+        ["TAXI LIGHTS","OFF"],
         ["TRANSPONDER","TA/RA"],
         ["CLOCK","START"]
       ]
@@ -149,7 +229,8 @@
       section: "CLIMB",
       items: [
         ["ALTIMETER","SET STD"],
-        ["Landing Lights","OFF"],
+        ["-Passing 10000 ft-",""],
+        ["LANDING LIGHTS","OFF"],
         ["SEATBELTS SIGN","OFF"]
       ]
     },
@@ -160,7 +241,9 @@
         ["RECALL","CHECK"],
         ["LANDING ALT","SET"],
         ["APPROACH BRIEFING","COMPLETE"],
+        ["-Passing TL-",""],
         ["ALTIMETER","LOCAL QNH"],
+        ["-Below 10000 ft-",""],
         ["LANDING LIGHTS","ON"],
         ["SEATBELTS SIGN","ON"]
       ]
@@ -240,8 +323,18 @@
     }
   ];
 
+  // --- Rendering / Storage ---
   const checklistEl = document.getElementById('checklist');
-  const prefix = 'ifly737max8_full_table_';
+  const prefix = 'ifly737max8_full_'; // key prefix for localStorage
+
+  function isSubsection(text){
+    // Erkennung: beginnt und endet mit '-' (z.B. "-Passing TL-")
+    return /^\s*-.*-\s*$/.test(text);
+  }
+
+  function trimHyphens(text){
+    return text.replace(/^\s*-+\s*/, '').replace(/\s*-+\s*$/, '');
+  }
 
   function buildChecklist() {
     checklistEl.innerHTML = '';
@@ -249,41 +342,82 @@
       const h2 = document.createElement('h2');
       h2.textContent = section.section;
       checklistEl.appendChild(h2);
+
       const table = document.createElement('table');
-      section.items.forEach((item,i)=>{
+      // optional: header row (hidden visually) - omitted to keep compact
+
+      section.items.forEach((item, i) => {
         const tr = document.createElement('tr');
-        const tdCheckbox = document.createElement('td');
-        const cb = document.createElement('input');
-        cb.type='checkbox';
-        const key = prefix+sIdx+'_'+i;
-        if(localStorage.getItem(key)==='1') cb.checked=true;
-        cb.addEventListener('change',()=>{
-          if(cb.checked) localStorage.setItem(key,'1');
-          else localStorage.removeItem(key);
-        });
-        tdCheckbox.appendChild(cb);
-        const tdItem = document.createElement('td');
-        tdItem.textContent=item[0];
-        const tdAction = document.createElement('td');
-        tdAction.textContent=item[1];
-        tr.appendChild(tdCheckbox);
-        tr.appendChild(tdItem);
-        tr.appendChild(tdAction);
+
+        if (isSubsection(item[0])) {
+          tr.classList.add('subsection');
+          const td = document.createElement('td');
+          td.colSpan = 3;
+          td.textContent = trimHyphens(item[0]);
+          tr.appendChild(td);
+        } else {
+          // checkbox cell
+          const tdCheckbox = document.createElement('td');
+          tdCheckbox.className = 'checkbox';
+          const cb = document.createElement('input');
+          cb.type = 'checkbox';
+          const key = prefix + sIdx + '_' + i;
+          cb.id = key; // unique id so label can reference it
+          try {
+            if (localStorage.getItem(key) === '1') cb.checked = true;
+          } catch (e) { /* localStorage blocked */ }
+
+          cb.addEventListener('change', function(){
+            try {
+              if (cb.checked) localStorage.setItem(key, '1');
+              else localStorage.removeItem(key);
+            } catch(e){}
+          });
+
+          tdCheckbox.appendChild(cb);
+
+          // item cell (label clickable)
+          const tdItem = document.createElement('td');
+          tdItem.className = 'item';
+          const lbl = document.createElement('label');
+          lbl.className = 'item-label';
+          lbl.htmlFor = cb.id;
+          lbl.textContent = item[0];
+          tdItem.appendChild(lbl);
+
+          // action cell
+          const tdAction = document.createElement('td');
+          tdAction.className = 'action';
+          tdAction.textContent = item[1] || '';
+
+          tr.appendChild(tdCheckbox);
+          tr.appendChild(tdItem);
+          tr.appendChild(tdAction);
+        }
+
         table.appendChild(tr);
       });
+
       checklistEl.appendChild(table);
     });
   }
 
-  document.getElementById('resetBtn').addEventListener('click',()=>{
-    checklistData.forEach((section,sIdx)=>{
-      section.items.forEach((_,i)=>localStorage.removeItem(prefix+sIdx+'_'+i));
+  // Reset-Button
+  document.getElementById('resetBtn').addEventListener('click', function(e){
+    if (!confirm('Reset all checked items for this checklist?')) return;
+    checklistData.forEach((section, sIdx) => {
+      section.items.forEach((_, i) => {
+        try { localStorage.removeItem(prefix + sIdx + '_' + i); } catch(e){}
+      });
     });
-    checklistEl.querySelectorAll('input[type="checkbox"]').forEach(cb=>cb.checked=false);
+    // uncheck visible checkboxes
+    checklistEl.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
   });
 
-  if(document.readyState!=='loading') buildChecklist();
-  else document.addEventListener('DOMContentLoaded',buildChecklist);
+  // initial render
+  if (document.readyState !== 'loading') buildChecklist();
+  else document.addEventListener('DOMContentLoaded', buildChecklist);
+
 })();
 </script>
 </body>
