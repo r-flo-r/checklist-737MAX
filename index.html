@@ -38,13 +38,11 @@
   }
   button:hover { background:#444; }
   table { width: 100%; border-collapse: collapse; margin-bottom: 10px; }
-  th, td { text-align:left; padding:6px; vertical-align:middle; }
+  th, td { text-align:left; padding:6px; }
   th { border-bottom:1px solid #555; }
   tr { border-bottom:1px solid #333; }
   input[type="checkbox"] {
-    width:35px;       /* neue Breite */
-    height:35px;      /* neue Höhe */
-    cursor:pointer;
+    width:35px; height:35px; cursor:pointer;
     margin-right:10px;
   }
   td.item { width: 45%; }
@@ -64,7 +62,7 @@
 
 <script>
 (function(){
-  // Beispiel für die CLIMB- und DESCEND-Abschnitte
+  // Checkliste mit Unterüberschriften
   const checklistData = [
     {section:"CLIMB", items:[
       ["ALTIMETER","SET STD"],
@@ -83,11 +81,11 @@
       ["LANDING LIGHTS","ON"],
       ["SEATBELTS SIGN","ON"]
     ]}
-    // Weitere Abschnitte können hier analog hinzugefügt werden
+    // Weitere Abschnitte hier analog hinzufügen
   ];
 
   const checklistEl = document.getElementById('checklist');
-  const prefix = 'ifly737max8_largecheckbox_';
+  const prefix = 'ifly737max8_subsections_';
 
   function buildChecklist() {
     checklistEl.innerHTML = '';
@@ -98,6 +96,7 @@
       const table = document.createElement('table');
       section.items.forEach((item,i)=>{
         const tr = document.createElement('tr');
+        // Prüfen auf Unterüberschrift
         if(item[0].startsWith('--') && item[0].endsWith('--')){
           tr.classList.add('subsection');
           const td = document.createElement('td');
